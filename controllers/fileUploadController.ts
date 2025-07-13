@@ -1,7 +1,7 @@
 import fileUploadService from "../services/fileUploadService";
 import { Response } from "express";
 import { FileUploadRequest } from "../types/requestTypes";
-import { CreateImageRecord, Image_Format_Enum, Image_Format_Type } from "../types/imageTypes";
+import { CreateImageRecord } from "../types/imageTypes";
 import { getImageFormat } from "../utils/mimeToEnum";
 
 
