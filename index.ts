@@ -8,7 +8,7 @@ const app = express();
 const apiRouter = express.Router();
 
 app.use(cors({
-    origin: 'http://localhost:5173',
+    origin: 'http://localhost:5000',
     credentials: true,
   }));
 
