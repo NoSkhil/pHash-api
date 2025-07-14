@@ -14,9 +14,6 @@ export const initializeQdrantCollection = async (): Promise<void> => {
         const collectionExists = qdrantData.collections.some(col => col.name === COLLECTION_NAME);
 
         if (!collectionExists) await qdrantClient.createCollection(COLLECTION_NAME, { vectors: { size: 256, distance: 'Euclid' }});
-
-        console.log("Vector DB initialised");
-
     } catch (err) { throw err };
 };
 
