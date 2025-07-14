@@ -9,9 +9,8 @@ const getImageById = async (id: string): Promise<Result<Image>> => {
 
         else return { success: true, data: image };
     }
-    catch (err) {
-        console.log(err);
-        return { success: false, code: 500, error: "Internal Server Error" }
+    catch (err: any) {
+        return { success: false, code: 500, error: err.message || "Internal Server Error" }
     }
 };
 
@@ -20,9 +19,8 @@ const uploadImage = async (imageData: CreateImageRecord): Promise<Result<Image>>
         const image = await db.image.create({data:imageData});
         return {success:true, data:image}
     }
-    catch (err) {
-        console.log(err);
-        return { success: false, code: 500, error: "Internal Server Error" }
+    catch (err: any) {
+        return { success: false, code: 500, error: err.message || "Internal Server Error" }
     }
 };
 

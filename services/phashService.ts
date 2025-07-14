@@ -1,0 +1,75 @@
+import { Image } from '../types/imageTypes';
+import { Result } from '../types/responseTypes';
+import pHash from 'sharp-phash';
+import { existsSync as fileExists } from 'fs';
+import { qdrantClient, COLLECTION_NAME, SIMILARITY_THRESHOLD, QdrantSearchResultItem } from '../utils/qdrant';
+
+const convertHashToVector = (hexHash: string): Result<number[]> => {
+    if (!/^[0-9a-fA-F]+$/.test(hexHash)) return { success: false, code: 400, error: "Invalid hexadecimal hash" };
+    if ((hexHash.length !== 64)) return { success: false, code: 400, error: "Invalid hexadecimal hash length" };
+
+    let binaryString = '';
+    for (let i = 0; i < hexHash.length; i++) {
+        binaryString += parseInt(hexHash[i], 16).toString(2).padStart(4, '0');
+    }
+    return { success: true, data: binaryString.split('').map(bit => parseInt(bit)) };
+};
+
+const hashImage = async (imageUrl: string): Promise<Result<string>> => {
+    try {
+        if (!fileExists(imageUrl)) return { success: false, code: 404, error: `Image not found at: ${imageUrl}` };
+
+        const perceptualHash = await pHash(imageUrl);
+        return { success: true, data: perceptualHash };
+    } catch (err: any) {
+        return { success: false, code: 500, error: err.message || "Internal Server Error" };
+    }
+};
+
+const searchSimilarHashes = async (queryVector: number[], limit: number, scoreThreshold: number): Promise<Result<QdrantSearchResultItem[]>> => {
+    try {
+        const searchResults = await qdrantClient.search(COLLECTION_NAME, {
+            vector: queryVector,
+            limit: limit,
+            score_threshold: scoreThreshold,
+            with_payload: true,
+            with_vector: false
+        });
+
+        const mappedResults: QdrantSearchResultItem[] = searchResults.map(result => ({
+            id: result.id,
+            score: result.score,
+            payload: result.payload || null,
+        }));
+
+        return { success: true, data: mappedResults };
+
+    } catch (err: any) {
+        return { success: false, code: 500, error: err.message || "Internal Server Error" };
+    }
+};
+
+const checkImageContent = async (image: Image): Promise<Result<QdrantSearchResultItem[]>> => {
+    try {
+        if (!image?.url) return { success: false, code: 400, error: "Invalid image object" };
+
+        const imageHash = await hashImage(image.url);
+        if (!imageHash.success) return { success: false, code: imageHash.code, error: imageHash.error };
+
+        const convertImageHashToVector = convertHashToVector(imageHash.data);
+        if (!convertImageHashToVector.success) return { success: false, code: convertImageHashToVector.code, error: convertImageHashToVector.error };
+
+        const similarHashes = await searchSimilarHashes(convertImageHashToVector.data, 5, SIMILARITY_THRESHOLD);
+        if (!similarHashes.success) return { success: false, code: similarHashes.code, error: similarHashes.error };
+
+        return { success: true, data: similarHashes.data };
+
+    } catch (err: any) {
+        return { success: false, code: 500, error: err.message || "Internal Server Error" };
+    }
+};
+
+export default {
+    hashImage,
+    checkImageContent
+};
