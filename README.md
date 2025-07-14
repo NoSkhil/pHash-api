@@ -15,8 +15,6 @@ Why not use machine learning?
 Vector Database for Similarity Search
 
 - Scales better than naive hash comparison as the database of illegal/copyrighted hashes grows
-  
-- Uses Euclidean distance on binary hash vectors to find images within the similarity threshold
 
 Redis Queue for Job Processing
 
