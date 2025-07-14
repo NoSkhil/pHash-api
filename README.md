@@ -7,6 +7,7 @@ Why not use machine learning?
 
 - Hashes are significantly faster to compute and compare, no GPU requirements, easier to scale
 - Better for legal compliance since you can prove exact matches (which accounts for >90% of illegaly hosted content) rather than probability scores
+- Stores only hash fingerprints, avoiding the retention of potentially illegal/copyrighted image data
 - DMCA law requires platforms to implement technical measures to prevent copyright infringement, hash-based filtering is cost-effective and demonstrates compliance
 - (https://www.law.cornell.edu/uscode/text/17/512)
 
