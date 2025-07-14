@@ -1,0 +1,1 @@
+<img src="docs/phash-architecture.svg" alt="Phash System Architecture" width="800"/>
