@@ -11,6 +11,7 @@ Why not use machine learning?
 - DMCA law requires platforms to implement technical measures to prevent copyright infringement, hash-based filtering is cost-effective and demonstrates compliance
 - (https://www.law.cornell.edu/uscode/text/17/512)
 
+## System Architecture
 <img src="docs/phash-architecture.svg" alt="Phash System Architecture" width="800"/>
 
 Vector Database for Similarity Search
