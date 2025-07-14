@@ -7,7 +7,7 @@ Why not use machine learning?
 
 - Significantly faster to compute, no GPU requirements, easier to scale
 - Better for legal compliance since you can prove exact matches (which accounts for >90% of illegaly hosted content) rather than probability scores
-- DMCA law requires platforms to implement technical measures to prevent copyright infringement - hash-based filtering is cost-effective and demonstrates compliance
+- DMCA law requires platforms to implement technical measures to prevent copyright infringement, hash-based filtering is cost-effective and demonstrates compliance
 - (https://www.law.cornell.edu/uscode/text/17/512)
 
 <img src="docs/phash-architecture.svg" alt="Phash System Architecture" width="800"/>
