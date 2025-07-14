@@ -25,3 +25,18 @@ Redis Queue for Job Processing
 Perceptual Hashing (pHash)
 
 - https://www.hackerfactor.com/blog/?/archives/432-Looks-Like-It.html
+
+## Environment Variables
+
+Create a `.env` file in the server and worker directories:
+
+```env
+DATABASE_URL=postgresql://username:password@host:port/database
+DIRECT_URL=postgresql://username:password@host:port/database
+SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_SERVICE_KEY=your_service_role_key
+COLLECTION_NAME=illegal_hashes
+SIMILARITY_THRESHOLD=3
+QDRANT_HOST=localhost
+QDRANT_PORT=6333
+REDIS_URL=redis://localhost:6379
