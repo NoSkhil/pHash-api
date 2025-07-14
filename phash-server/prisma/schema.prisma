@@ -1,0 +1,53 @@
+generator client {
+  provider        = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Image {
+  id                  String     @id @unique @default(cuid())
+  url                 String
+  filename            String     @unique
+  original_name       String
+  mimetype            Image_Format
+  created_date        DateTime   @default(now())
+  updated_date        DateTime   @default(now()) @updatedAt
+
+  verifications  ImageVerification[]
+}
+
+model ImageVerification {
+  id               String   @id @default(cuid())
+  imageId          String    
+  hash             String
+  isVerified       Boolean
+  isIllegal        Boolean
+  verifiedAt       DateTime?
+  similarity       Float?
+  matchedHashes   Json?
+
+  image            Image    @relation(fields: [imageId], references: [id], onDelete: Cascade)
+}
+
+model Log {
+  id           String   @id
+  type         Log_Type
+  content      Json
+  created_date DateTime @default(now())
+}
+
+enum Log_Type {
+  error
+  user_action
+}
+
+enum Image_Format {
+  JPEG @map("image/jpeg")
+  PNG  @map("image/png")
+  WEBP @map("image/webp")
+  SVG  @map("image/svg+xml")
+}
