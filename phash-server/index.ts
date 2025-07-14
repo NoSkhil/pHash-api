@@ -5,7 +5,6 @@ import cors from 'cors';
 import fileUploadRoutes from './routes/fileUploadRoutes';
 import { createClient } from '@supabase/supabase-js'
 import { Image } from './types/imageTypes';
-import { initializeQdrantCollection } from './utils/qdrant';
 import { getRedisClient } from './utils/redis';
 import { imageProcessingQueue } from './utils/redisQueue';
 
@@ -35,9 +34,6 @@ const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, async () => {
   console.log(`pHash server running at port - ${PORT}`);
-
-  await initializeQdrantCollection();
-  console.log("Vector DB initialised");
 
   let redisClient = await getRedisClient();
   console.log("Redis client connected.");
