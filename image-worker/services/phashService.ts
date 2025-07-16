@@ -60,7 +60,7 @@ const searchSimilarHashes = async (queryVector: number[], limit: number, scoreTh
     }
 };
 
-const checkImageContent = async (image: Image): Promise<Result<QdrantSearchResultItem[]>> => {
+const checkImageContent = async (image: Image): Promise<Result<ImageVerification>> => {
     try {
         if (!image?.url) return { success: false, code: 400, error: "Invalid image object" };
 
@@ -84,10 +84,10 @@ const checkImageContent = async (image: Image): Promise<Result<QdrantSearchResul
             matchedHashes: similarHashes.data.length > 0 ? similarHashes.data as any : null
         };
 
-        const recordCreationResult = await createImageVerificationRecord(verificationRecordData);
-        console.log(recordCreationResult);
+        const imageVerificationRecord = await createImageVerificationRecord(verificationRecordData);
+        if (!imageVerificationRecord.success) return { success: false, code: imageVerificationRecord.code, error: imageVerificationRecord.error };  
 
-        return { success: true, data: similarHashes.data };
+        return { success: true, data: imageVerificationRecord.data };
 
     } catch (err: any) {
         return { success: false, code: 500, error: err.message || "Internal Server Error" };
