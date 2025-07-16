@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 import cors from 'cors';
 import fileUploadRoutes from './routes/fileUploadRoutes';
+import vectordbRoutes from './routes/vectordbRoutes';
 import { getRedisClient } from './utils/redis';
 import { initializeQdrantCollection } from './utils/qdrant';
 import { subscribeToImageUploads } from './utils/supabase';
@@ -22,6 +23,7 @@ app.get('/', (req: Request, res: Response) => res.status(200).send("phash server
 app.use('/api', apiRouter);
 
 apiRouter.use('/upload', fileUploadRoutes);
+apiRouter.use('/vectordb', vectordbRoutes);
 
 
 
