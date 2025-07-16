@@ -72,7 +72,7 @@ const checkImageContent = async (image: Image): Promise<Result<QdrantSearchResul
 
         const similarHashes = await searchSimilarHashes(convertImageHashToVector.data, 5, SIMILARITY_THRESHOLD);
         if (!similarHashes.success) return { success: false, code: similarHashes.code, error: similarHashes.error };    
-/*
+
         const isIllegal = similarHashes.data.length > 0;
 
         const verificationRecordData: CreateImageVerificationRecord = {
@@ -84,10 +84,9 @@ const checkImageContent = async (image: Image): Promise<Result<QdrantSearchResul
             matchedHashes: similarHashes.data.length > 0 ? similarHashes.data as any : null
         };
 
-        // Create the image verification record
         const recordCreationResult = await createImageVerificationRecord(verificationRecordData);
+        console.log(recordCreationResult);
 
-*/
         return { success: true, data: similarHashes.data };
 
     } catch (err: any) {
