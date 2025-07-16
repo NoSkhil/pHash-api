@@ -62,15 +62,15 @@ const searchSimilarHashes = async (queryVector: number[], limit: number, scoreTh
 
 const checkImageContent = async (image: Image): Promise<Result<ImageVerification>> => {
     try {
-        if (!image?.url) return { success: false, code: 400, error: "Invalid image object" };
+        if (!image.url || !image.id) return { success: false, code: 400, error: "Invalid image object" };
 
         const imageHash = await hashImage(image.url);
         if (!imageHash.success) return { success: false, code: imageHash.code, error: imageHash.error };
 
-        const convertImageHashToVector = convertHashToVector(imageHash.data);
-        if (!convertImageHashToVector.success) return { success: false, code: convertImageHashToVector.code, error: convertImageHashToVector.error };
+        const imageVectorEmbedding = convertHashToVector(imageHash.data);
+        if (!imageVectorEmbedding.success) return { success: false, code: imageVectorEmbedding.code, error: imageVectorEmbedding.error };
 
-        const similarHashes = await searchSimilarHashes(convertImageHashToVector.data, 5, SIMILARITY_THRESHOLD);
+        const similarHashes = await searchSimilarHashes(imageVectorEmbedding.data, 5, SIMILARITY_THRESHOLD);
         if (!similarHashes.success) return { success: false, code: similarHashes.code, error: similarHashes.error };    
 
         const isIllegal = similarHashes.data.length > 0;
