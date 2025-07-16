@@ -27,7 +27,6 @@ model ImageVerification {
   isVerified       Boolean
   isIllegal        Boolean
   verifiedAt       DateTime?
-  similarity       Float?
   matchedHashes   Json?
 
   image            Image    @relation(fields: [imageId], references: [id], onDelete: Cascade)

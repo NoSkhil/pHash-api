@@ -1,24 +1,14 @@
-import dotenv from 'dotenv';
-dotenv.config();
 import { Worker, Job } from 'bullmq';
-import phashService from './services/phashService';
-import { Image } from './types/imageTypes';
-import { initializeQdrantCollection } from './utils/qdrant';
-import { redisConnection } from './utils/redis';
+import phashService from '../services/phashService';
+import { Image } from '../types/imageTypes';
+import { redisConnection } from '../utils/redis';
 
-async function startWorker() {
-    try {
-        await initializeQdrantCollection();
-        console.log("Worker: Qdrant client initialized");
-    } catch (error) {
-        console.error("Worker: Failed to initialize Qdrant client:", error);
-        process.exit(1);
-    }
+export async function initialiseImageWorker() {
 
     const worker = new Worker('image_processing_queue', async (job: Job<Image>) => {
         console.log(`Worker: Processing job ${job.id} for image ID ${job.data.id}`);
 
-        job.data.url = `../phash-server/${job.data.url}`; // only serves to test the worker locally. Since I'm not uploading images to s3 currently.
+        job.data.url = `../phash-server/${job.data.url}`; // This line is for local testing. In a production setup, 'job.data.url' would contain an s3 url.
         const result = await phashService.checkImageContent(job.data);
 
         if (!result.success) throw new Error(`Processing failed: ${result.error}`);
@@ -43,10 +33,5 @@ async function startWorker() {
         console.error('Worker: uncaught error:', err);
     });
 
-    console.log('Image pHash Worker: Ready.');
+    return worker;
 }
-
-startWorker().catch(err => {
-    console.error("Worker process crashed:", err);
-    process.exit(1);
-});

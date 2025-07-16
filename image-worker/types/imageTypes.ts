@@ -7,6 +7,7 @@ import type { Image_Format as Prisma_Image_Format_Type} from "@prisma/client";
 type CreateImageRecord = Prisma.ImageCreateInput;
 type Image = ImageType;
 type ImageVerification = ImageVerificationType;
+type CreateImageVerificationRecord = Prisma.ImageVerificationUncheckedCreateInput;
 
 
 const Image_Format_Enum = Prisma_Image_Format_Enum;
@@ -19,5 +20,6 @@ export {
     Image,
     Image_Format_Enum,
     Image_Format_Type,
-    ImageVerification
+    ImageVerification,
+    CreateImageVerificationRecord
 };

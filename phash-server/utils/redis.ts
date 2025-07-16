@@ -13,8 +13,10 @@ redisClientInstance.on('error', (err: any) => {
 });
 
 export const getRedisClient = async (): Promise<RedisClientType> => {
-    if (!redisClientInstance.isReady) await redisClientInstance.connect();
-    return redisClientInstance;
+    try {
+        if (!redisClientInstance.isReady) await redisClientInstance.connect();
+        return redisClientInstance;
+    } catch (err) { throw err; }
 };
 
 export const redisConnection = {
