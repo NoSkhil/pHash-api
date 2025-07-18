@@ -42,7 +42,7 @@ Eg,
 
 Converting Hash to Vectors:
 To use Dot Product to get the Hamming distance, 
-1) A binary hash is transformed into a vector of -1.0s and 1.0s
+1) The binary pHash is transformed into a vector of -1.0s and 1.0s
 2) 0 bits become -1.0 and 1 bits become 1.0. 
 3) The Dot Product then directly reflects the original Hamming distance.
 Eg,
