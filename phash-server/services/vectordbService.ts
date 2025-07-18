@@ -2,14 +2,19 @@ import { Result } from '../types/responseTypes';
 import { COLLECTION_NAME, qdrantClient } from '../utils/qdrant';
 
 const convertHashToVector = (hexHash: string): Result<number[]> => {
-    if (!/^[0-9a-fA-F]+$/.test(hexHash)) return { success: false, code: 400, error: "Invalid hexadecimal hash" };
-    if ((hexHash.length !== 64)) return { success: false, code: 400, error: "Invalid hexadecimal hash length" };
+    if (!/^[0-9a-fA-F]+$/.test(hexHash)) return { success: false, code: 400, error: "Invalid hexadecimal hash format" };
+    if (hexHash.length !== 64) return { success: false, code: 400, error: `Invalid hexadecimal hash length` };
 
     let binaryString = '';
+    // convert each hex character to its 4-bit binary form
     for (let i = 0; i < hexHash.length; i++) {
         binaryString += parseInt(hexHash[i], 16).toString(2).padStart(4, '0');
     }
-    return { success: true, data: binaryString.split('').map(bit => parseInt(bit)) };
+
+    // Map '0' bits to -1.0 and '1' bits to 1.0, necessary for the Dot product to correctly emulate Hamming distance
+    const vectorData = binaryString.split('').map(bit => (parseInt(bit) === 1 ? 1.0 : -1.0));
+
+    return { success: true, data: vectorData };
 };
 
 const embedIllegalHashes = async (hashes: string[]): Promise<Result<string>> => {
