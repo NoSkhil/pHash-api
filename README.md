@@ -26,6 +26,34 @@ Perceptual Hashing (pHash)
 
 - https://www.hackerfactor.com/blog/?/archives/432-Looks-Like-It.html
 
+
+Hamming Distance:
+The Hamming distance measures the difference between two binary strings of the same length by counting how many bit positions differ. A lower Hamming distance indicates higher similarity.
+Eg, For the binary strings `00010` and `00001`, bits differ at positions 4 and 5. So the Hamming distance is 2.
+
+Dot Product for Similarity:
+- The Dot Product of two vectors is calculated by multiplying their corresponding components and summing the results. 
+Eg, 
+1) For binary vectors v1 = [0, 1, 1, 0] and v2 = [0, 1, 0, 1]
+2) Dot Product = (0 x 0) + (1 x 1) + (1 x 0) + (0 x 1) = 0 + 1 + 0 + 0 = 1.
+3) H1, Hamming weight of v1 (number of non-zero elements) = 2
+4) H2, Hamming weight of v2 = 2
+3) Hamming Distance =  (H1+ H2) - 2 x Dot Product = (2 + 2) - (2 x 1) = 2
+
+Converting Hash to Vectors:
+To use Dot Product to get the Hamming distance, 
+1) A binary hash is transformed into a vector of -1.0s and 1.0s
+2) 0 bits become -1.0 and 1 bits become 1.0. 
+3) The Dot Product of these vectors then directly reflects the original Hamming distance.
+Eg,
+1) Binary Hash A: `1010` is converted to Vector Va: [1.0, -1.0, 1.0, -1.0].
+2) Binary Hash B: `1001` is converted to Vector Vb: [1.0, -1.0, -1.0, 1.0].
+3) Dot Product = (1 x 1) + (-1 x -1) + (1 x -1) + (-1 x 1) = 1 + 1 - 1 - 1 = 0.
+4) For these 4-bit hashes, a Dot Product of 0 corresponds to a Hamming distance of 2
+- Dot Product = N (length of hash) - 2 x H (Hamming distance)
+- 0 = 4 - 2H
+- H = 2 
+
 ## Environment Variables
 
 Create a `.env` file in the server and worker directories:
