@@ -27,12 +27,12 @@ Perceptual Hashing (pHash)
 - https://www.hackerfactor.com/blog/?/archives/432-Looks-Like-It.html
 
 
-Hamming Distance
-- The Hamming distance measures the difference between two binary strings of the same length by counting how many bit positions differ. A lower Hamming distance indicates higher similarity.
+Hamming Distance for similarity of binary strings
+- How many bit positions differ in a binary string.
+- Lower Hamming distance indicates higher similarity.
 Eg, For the binary strings `00010` and `00001`, bits differ at positions 4 and 5. So the Hamming distance is 2.
 
-Dot Product for Similarity:
-- The Dot Product of two vectors is calculated by multiplying their corresponding components and summing the results. 
+Dot Product for similarity of binary vectors
 Eg, 
 1) For binary vectors v1 = [0, 1, 1, 0] and v2 = [0, 1, 0, 1]
 2) Dot Product = (0 x 0) + (1 x 1) + (1 x 0) + (0 x 1) = 0 + 1 + 0 + 0 = 1.
