@@ -27,8 +27,8 @@ Perceptual Hashing (pHash)
 - https://www.hackerfactor.com/blog/?/archives/432-Looks-Like-It.html
 
 
-Hamming Distance:
-The Hamming distance measures the difference between two binary strings of the same length by counting how many bit positions differ. A lower Hamming distance indicates higher similarity.
+Hamming Distance
+- The Hamming distance measures the difference between two binary strings of the same length by counting how many bit positions differ. A lower Hamming distance indicates higher similarity.
 Eg, For the binary strings `00010` and `00001`, bits differ at positions 4 and 5. So the Hamming distance is 2.
 
 Dot Product for Similarity:
