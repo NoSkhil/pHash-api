@@ -6,15 +6,33 @@ export const qdrantClient = new QdrantClient({
 });
 
 export const COLLECTION_NAME = process.env.COLLECTION_NAME || "illegal_hashes";
-export const SIMILARITY_THRESHOLD = parseInt(process.env.SIMILARITY_THRESHOLD || '3');
+
+export const SIMILARITY_THRESHOLD = parseFloat(process.env.SIMILARITY_THRESHOLD || '180.0');
 
 export const initializeQdrantCollection = async (): Promise<void> => {
     try {
         const qdrantData = await qdrantClient.getCollections();
         const collectionExists = qdrantData.collections.some(col => col.name === COLLECTION_NAME);
 
-        if (!collectionExists) await qdrantClient.createCollection(COLLECTION_NAME, { vectors: { size: 256, distance: 'Euclid' }});
-    } catch (err) { throw err; }
+        if (!collectionExists) {
+            await qdrantClient.createCollection(COLLECTION_NAME, {
+                vectors: {
+                    size: 256,
+                    // Dot product directly correlates with Hamming distance. Dot Product = Total Bits − 2×Hamming Distance
+                    distance: "Dot"
+                },
+                quantization_config: {
+                    binary: {
+                        always_ram: true
+                    }
+                }
+            });
+        }
+
+    } catch (err: any) {
+        console.error(`Error initializing Qdrant collection '${COLLECTION_NAME}':`, err.message);
+        throw err;
+    }
 };
 
 export interface QdrantSearchResultItem {
