@@ -2,21 +2,15 @@ import { Image, ImageVerification, CreateImageVerificationRecord } from '../type
 import { Result } from '../types/responseTypes';
 import pHash from 'sharp-phash';
 import { existsSync as fileExists } from 'fs';
-import { qdrantClient, COLLECTION_NAME, SIMILARITY_THRESHOLD, QdrantSearchResultItem } from '../utils/qdrant';
+import { qdrantClient, COLLECTION_NAME, SIMILARITY_THRESHOLD, QdrantSearchResultItem, PHASH_DIMENSIONS} from '../utils/qdrant';
 import db from '../prisma/client';
 
-const convertHashToVector = (hexHash: string): Result<number[]> => {
-    if (!/^[0-9a-fA-F]+$/.test(hexHash)) return { success: false, code: 400, error: "Invalid hexadecimal hash format" };
-    if (hexHash.length !== 64) return { success: false, code: 400, error: `Invalid hexadecimal hash length` };
-
-    let binaryString = '';
-    // convert each hex character to its 4-bit binary form
-    for (let i = 0; i < hexHash.length; i++) {
-        binaryString += parseInt(hexHash[i], 16).toString(2).padStart(4, '0');
-    }
+const convertHashToVector = (binaryHash: string): Result<number[]> => {
+    if (!/^[01]+$/.test(binaryHash)) return { success: false, code: 400, error: "Invalid binary hash string" };
+    if (binaryHash.length !== PHASH_DIMENSIONS) return { success: false, code: 400, error: "Invalid binary hash length" };
 
     // Map '0' bits to -1.0 and '1' bits to 1.0, necessary for the Dot product to correctly emulate Hamming distance
-    const vectorData = binaryString.split('').map(bit => (parseInt(bit) === 1 ? 1.0 : -1.0));
+    const vectorData = binaryHash.split('').map(bit => (parseInt(bit, 10) === 1 ? 1.0 : -1.0));
 
     return { success: true, data: vectorData };
 };

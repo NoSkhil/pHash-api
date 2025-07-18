@@ -5,9 +5,11 @@ export const qdrantClient = new QdrantClient({
     port: parseInt(process.env.QDRANT_PORT || '6333')
 });
 
+export const PHASH_DIMENSIONS = parseInt(process.env.PHASH_DIMENSIONS || '64');
+
 export const COLLECTION_NAME = process.env.COLLECTION_NAME || "illegal_hashes";
 
-export const SIMILARITY_THRESHOLD = parseFloat(process.env.SIMILARITY_THRESHOLD || '180.0');
+export const SIMILARITY_THRESHOLD = parseFloat(process.env.SIMILARITY_THRESHOLD || '50.0');
 
 export const initializeQdrantCollection = async (): Promise<void> => {
     try {
@@ -17,8 +19,7 @@ export const initializeQdrantCollection = async (): Promise<void> => {
         if (!collectionExists) {
             await qdrantClient.createCollection(COLLECTION_NAME, {
                 vectors: {
-                    size: 256,
-                    // Dot product directly correlates with Hamming distance. Dot Product = Total Bits − 2×Hamming Distance
+                    size: PHASH_DIMENSIONS,
                     distance: "Dot"
                 },
                 quantization_config: {
