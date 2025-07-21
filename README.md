@@ -27,6 +27,9 @@ Perceptual Hashing (pHash)
 - https://www.hackerfactor.com/blog/?/archives/432-Looks-Like-It.html
 
 
+--x--
+
+
 Hamming Distance for similarity of binary strings
 - How many bit positions differ in a binary string.
 - Lower Hamming distance indicates higher similarity.
